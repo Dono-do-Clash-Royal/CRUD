@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Tempo de geração: 08-Maio-2026 às 15:41
+-- Tempo de geração: 08-Maio-2026 às 16:02
 -- Versão do servidor: 8.4.9
 -- versão do PHP: 8.3.26
 
@@ -32,6 +32,7 @@ USE `appdb`;
 DROP TABLE IF EXISTS `clientes`;
 CREATE TABLE `clientes` (
   `id` int NOT NULL,
+  `nif` varchar(15) DEFAULT NULL,
   `nome` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `telefone` varchar(20) DEFAULT NULL
@@ -41,8 +42,8 @@ CREATE TABLE `clientes` (
 -- Extraindo dados da tabela `clientes`
 --
 
-INSERT INTO `clientes` (`id`, `nome`, `email`, `telefone`) VALUES
-(1, 'João', 'Joao@sapo.pt', '123456789');
+INSERT INTO `clientes` (`id`, `nif`, `nome`, `email`, `telefone`) VALUES
+(1, NULL, 'João', 'Joao@sapo.pt', '123456789');
 
 --
 -- Índices para tabelas despejadas
