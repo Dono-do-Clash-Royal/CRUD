@@ -222,13 +222,10 @@ public class App {
                         <tr>
 
                             <th>ID</th>
-
+                            <th>NIF</th>
                             <th>Nome</th>
-
                             <th>Email</th>
-
                             <th>Telefone</th>
-
                             <th>Ações</th>
 
                         </tr>
@@ -258,24 +255,22 @@ public class App {
                 while (rs.next()) {
 
                     int id = rs.getInt("id");
-
                     String nome = rs.getString("nome");
-
                     String email = rs.getString("email");
-
                     String telefone = rs.getString("telefone");
+                    String nif = rs.getString("nif");
+
 
 
                     html.append("<tr>");
-
                     html.append("<td>").append(id).append("</td>");
-
+                    html.append("<td>").append(nif).append("</td>");
                     html.append("<td>").append(nome).append("</td>");
-
                     html.append("<td>").append(email).append("</td>");
-
                     html.append("<td>").append(telefone).append("</td>");
 
+
+                    
 
                     html.append("<td>");
 
@@ -309,7 +304,6 @@ public class App {
                 </html>
 
             """);
-
 
             exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
 
@@ -364,6 +358,10 @@ public class App {
 
 
                 <form method='POST' action='/guardar'>
+
+                    nif:
+
+                    <input name='nif' required>
 
                     Nome:
 
@@ -431,11 +429,9 @@ public class App {
 
                 String[] params = body.split("&");
 
-
+                String nif = "";
                 String nome = "";
-
                 String email = "";
-
                 String telefone = "";
 
 
@@ -453,10 +449,9 @@ public class App {
 
                         switch (key) {
 
+                            case "nif": nif = value; break;
                             case "nome": nome = value; break;
-
                             case "email": email = value; break;
-
                             case "telefone": telefone = value; break;
 
                         }
@@ -476,16 +471,14 @@ public class App {
                 }
 
 
-                String sql = "INSERT INTO clientes(nome,email,telefone) VALUES (?,?,?)";
+                String sql = "INSERT INTO clientes(nif,nome,email,telefone) VALUES (?,?,?,?)";
 
                 PreparedStatement ps = con.prepareStatement(sql);
 
-
-                ps.setString(1, nome);
-
-                ps.setString(2, email);
-
-                ps.setString(3, telefone);
+                ps.setString(1, nif);
+                ps.setString(2, nome);
+                ps.setString(3, email);
+                ps.setString(4, telefone);
 
 
                 ps.executeUpdate();
@@ -627,11 +620,9 @@ server.createContext("/editar", exchange -> {
 
         }
 
-
+        String nif = rs.getString("nif");
         String nome = rs.getString("nome");
-
         String email = rs.getString("email");
-
         String telefone = rs.getString("telefone");
 
 
@@ -670,12 +661,9 @@ server.createContext("/editar", exchange -> {
 
 
         html.append("<input type='hidden' name='id' value='").append(id).append("'>");
-
-
+        html.append("NIF:<input name='nif' value='").append(nif).append("' required>");
         html.append("Nome:<input name='nome' value='").append(nome).append("' required>");
-
         html.append("Email:<input name='email' value='").append(email).append("' required>");
-
         html.append("Telefone:<input name='telefone' value='").append(telefone).append("'>");
 
 
@@ -753,16 +741,12 @@ server.createContext("/atualizar", exchange -> {
 
         String body = new String(exchange.getRequestBody().readAllBytes(), "UTF-8");
 
-
         String[] params = body.split("&");
 
-
         String idStr = "";
-
+        String nif = "";
         String nome = "";
-
         String email = "";
-
         String telefone = "";
 
 
@@ -781,11 +765,9 @@ server.createContext("/atualizar", exchange -> {
                 switch (key) {
 
                     case "id": idStr = value; break;
-
+                    case "nif": nif = value; break;
                     case "nome": nome = value; break;
-
                     case "email": email = value; break;
-
                     case "telefone": telefone = value; break;
 
                 }
@@ -808,18 +790,19 @@ server.createContext("/atualizar", exchange -> {
         }
 
 
-        String sql = "UPDATE clientes SET nome=?, email=?, telefone=? WHERE id=?";
+        String sql = "UPDATE clientes SET nif=?, nome=?, email=?, telefone=? WHERE id=?";
 
         PreparedStatement ps = con.prepareStatement(sql);
 
+        ps.setString(1, nif);
 
-        ps.setString(1, nome);
+        ps.setString(2, nome);
 
-        ps.setString(2, email);
+        ps.setString(3, email);
 
-        ps.setString(3, telefone);
+        ps.setString(4, telefone);
 
-        ps.setInt(4, id);
+        ps.setInt(5, id);
 
 
         ps.executeUpdate();
@@ -1025,6 +1008,6 @@ server.createContext("/atualizar", exchange -> {
         server.start();
 
         System.out.println("Servidor em http://localhost:8080");
-
+        
     }
 }
